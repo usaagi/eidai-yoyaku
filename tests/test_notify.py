@@ -16,7 +16,7 @@ def _fake_urlopen(responses: dict, captured: list):
     return fake
 
 
-OK = {"line": {"status": 200}, "discord": {"status": 200}, "slack": {"status": 200}}
+OK = {"line": {"status": 200}, "discord": {"status": 204, "response": ""}, "slack": {"status": 200}}
 
 
 def test_send_notification_posts_to_all_destinations(monkeypatch):

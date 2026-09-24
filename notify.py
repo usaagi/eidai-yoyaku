@@ -19,8 +19,10 @@ def _send(url: str, to: str, message: str) -> None:
     # GAS は 302 で結果URLへリダイレクトする。urllib は GET で追従する
     with urllib.request.urlopen(req, timeout=30) as res:
         result = json.loads(res.read().decode("utf-8"))
-    if result.get("status") != 200:
-        raise RuntimeError(f"{to} 通知に失敗しました: {result.get('message')}")
+    # 送信先の HTTP ステータスがそのまま返る。Discord Webhook は成功時 204
+    status = result.get("status")
+    if not (isinstance(status, int) and 200 <= status < 300):
+        raise RuntimeError(f"{to} 通知に失敗しました: {result}")
 
 
 def send_notification(message: str) -> None:
