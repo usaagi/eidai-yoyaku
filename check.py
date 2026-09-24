@@ -10,7 +10,7 @@ import urllib.request
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
 
-from notify import send_line
+from notify import send_notification
 
 BASE_URL = "https://www4.revn.jp/eidai-sangyo-shinjuku/reserve/calendar"
 LABEL_ID = "5"  # 新宿ショールーム予約
@@ -96,7 +96,7 @@ def main() -> int:
         if args.dry_run:
             print(message)
         else:
-            send_line(message)
+            send_notification(message)
     return 0
 
 
