@@ -1,6 +1,7 @@
+from datetime import date
 from pathlib import Path
 
-from check import Slot, build_message, parse_vacant_slots
+from check import Slot, build_message, parse_vacant_slots, watch_range
 
 FIXTURE = Path(__file__).parent / "fixtures" / "calendar.html"
 
@@ -12,6 +13,13 @@ def test_parse_vacant_slots_only_returns_reservable():
         Slot("2026-10-15", "15:00", "5763"),
         Slot("2026-10-16", "15:00", "5763"),
     }
+
+
+def test_watch_range_is_capped_by_until():
+    assert watch_range(date(2026, 9, 24), 21, date(2026, 10, 14)) == (date(2026, 9, 24), date(2026, 10, 14))
+    assert watch_range(date(2026, 10, 1), 21, date(2026, 10, 14)) == (date(2026, 10, 1), date(2026, 10, 14))
+    assert watch_range(date(2026, 9, 1), 21, date(2026, 10, 14)) == (date(2026, 9, 1), date(2026, 9, 21))
+    assert watch_range(date(2026, 9, 24), 21, None) == (date(2026, 9, 24), date(2026, 10, 14))
 
 
 def test_build_message():

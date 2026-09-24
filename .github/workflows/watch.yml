@@ -19,20 +19,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
 
-      # 前回実行時の空き枠一覧を復元（新規に空いた枠だけ通知するため）
-      - uses: actions/cache/restore@v4
-        with:
-          path: state.json
-          key: state-${{ github.run_id }}
-          restore-keys: state-
-
       - run: uv run --no-dev python check.py
         env:
-          WATCH_DAYS: "14"
+          WATCH_DAYS: "21"
+          WATCH_UNTIL: "2026-10-14"
           NOTIFY_URL: ${{ secrets.NOTIFY_URL }}
-
-      - uses: actions/cache/save@v4
-        if: success()
-        with:
-          path: state.json
-          key: state-${{ github.run_id }}
